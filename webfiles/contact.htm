@@ -12,6 +12,7 @@
 	<link rel="stylesheet" type="text/css" href="style.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+    <link rel="style.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -24,27 +25,24 @@
 <div class="container">
 
 	<div class="header">
-		<h1 id="headerGreeting"></h1>
-		<button onclick="signOut();" class="ui-btn ui-btn-inline ui-corner-all" id="signout" style="float: right;">Sign Out</button>
-	</div>
+        <h1 id="headerGreeting"></h1>
+        <button onclick="signOut();" class="ui-btn ui-btn-inline ui-corner-all" id="signout" style="float: right;">Sign Out</button>
+    </div>
 
-	<div class="search-container">
-		<!-- Add contact button -->
-			<div data-role="button">
-
-				<div data-role="main" class="ui-content">
-					<a href="#myPopup" data-rel="popup" class="ui-btn ui-btn-inline ui-corner-all">Add a Contact</a> 
-				
-					
-				<div class="search">
-					<form action="/search.php">
-					<input type="text" placeholder="Search Contacts" name="search">
-					<button type="button" class="buttons" onclick="searchContact();" style="float: right;width: 20%"> Search </button>
-					<!--<span id="contactSearchResult"></span>-->
-					<!-- <select id="contactList" style="display:none; visibility:hidden;"> -->
-					</select>
-				</div>
-	</div>
+    <div class="row">
+        <!-- Add contact button -->
+    		<div class="col-md-4">
+                    <a href="#myPopup" data-rel="popup" class="ui-btn ui-btn-inline ui-corner-all" style= "float: left; bottom: 5px;">Add a Contact</a> 
+            </div>
+            <div class="col-md-4" data-inline="true" style="text-align: right; width: 300px; left: 350px;">
+            	<form action="/search.php">
+                    <input type="text" placeholder="Search Contacts" style="position: bottom;" name="search">
+           		</form>
+           	</div>
+           	<div class="col-md-4" style="float: right; width: 125px; padding-left: 0; bottom: 4px;">
+           		<button type="button" class="ui-btn ui-btn-inline ui-corner-all" onclick="searchContact();" data-inline="true" style= "left: 125px; display: inline-block; width: 100px; position:top;"> Search </button>
+           	</div>      	
+    </div>
 				
 			
 
@@ -66,40 +64,34 @@
 						</div>
 					</form>
 				</div>
-			</div>
-		</div>
-
-		
-
-
-
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Firstname</th>
-					<th>Lastname</th>
-                    <th>Email</th>
-                    <th>Phone number</th>
-                    <th>Address</th>
-                    <th>Username</th>
-                </tr>
-            </thead>
-            <tbody id="contactTable">
-
-				<tr>
-					<td>Henry</td>
-					<td>Ton</td>
-					<td>sadfa</td>
-					<td>34345354</td>
-					<td>lskdmfds</td>
-					<td>sdfdsfds</td>
-				</tr>
-		
-			  
-            </tbody>
-        </table>
     </div>
+		</div>
+		
+    <div class="container">
+    <table class="table" style="overflow: hidden;">
+                <thead>
+                    <tr>
+                        <th>Firstname</th>
+                        <th>Lastname</th>
+                        <th>Email</th>
+                        <th>Phone number</th>
+                        <th>Address</th>
+                        <th>Username</th>
+                    </tr>
+                </thead>
+                <tbody id="contactTable">
 
+                    <tr>
+                        <td>Henry</td>
+                        <td>Ton</td>
+                        <td>sadfa</td>
+                        <td>34345354</td>
+                        <td>lskdmfds</td>
+                        <td>garb</td>
+                    </tr>  
+                </tbody>
+            </table>
+        </div>
     
     <center>
         <p id="#myContainer"></p>
