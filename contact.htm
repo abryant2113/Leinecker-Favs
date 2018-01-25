@@ -1,0 +1,107 @@
+﻿<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <title>Contacts</title>
+    <meta charset="utf-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+    <link rel="style.css">
+	
+	<!-- javascript controller-->
+    <script src="controller.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</head>
+
+<body onload="populateTable()">
+
+	<div class="container">
+
+		<div class="header">
+			<h1 id="headerGreeting"></h1>
+			<button onclick="signOut();" class="ui-btn ui-btn-inline ui-corner-all" id="signout" style="float: right;">Sign Out</button>
+		</div>
+
+	<div class="main" style="padding-top: 80px">
+			<div class="row">
+				<!-- Add contact button -->
+				<div class="col-md-4">
+					<a href="#myPopup" data-rel="popup" class="ui-btn ui-btn-inline ui-corner-all" style= "float: left; bottom: 5px;">Add a Contact</a> 
+				</div>
+				<div class="col-md-4" data-inline="true" style="text-align: right; width: 300px; left: 350px;">	
+				<form action="\search.php">
+					<input class="isActiveElement" id="searchText" type="text" placeholder="Search Contacts" style="position: bottom;" name="search" id="searchText" onkeypress="return searchKeyPress(event);">
+				</form>
+				</div>
+				<div class="col-md-4" style="float: right; width: 125px; padding-left: 0; bottom: 4px;">
+					<button id="btnSearch" type="button" class="ui-btn ui-btn-inline ui-corner-all" onclick="searchContact();"  data-inline="true" style= " display: inline-block; width: 100px; position:top;">Search</button>
+				</div>      	
+			</div>
+					
+					<!-- Script for hitting enter on the search -->
+					<script>
+					function searchKeyPress(e)
+					{
+						// look for window.event in case event isn't passed in
+						e = e || window.event;
+						if (e.keyCode == 13)
+						{
+							document.getElementById('btnSearch').click();
+							return false;
+						}
+						return true;
+					}
+					</script>
+					
+			<div data-role="popup" id="myPopup" class="ui-content" style="min-width:250px;">
+				<form method="post" action="/action_page_post.php">
+					<div>
+						<h3>Add a Contact</h3>
+						<label id="firstname_label" for="name" class="ui-hidden-accessible">Firstname:</label>
+						<input type="text" name="name" id="firstname_field" placeholder="Firstname" method="POST">
+						<label id="lastname_label" for="name" class="ui-hidden-accessible">Lastname:</label>
+						<input type="text" name="name" id="lastname_field" placeholder="Lastname" method="POST">
+						<label id="email_label" for="email" class="ui-hidden-accessible">E-mail:</label>
+						<input type="text" name="email" id="email_field" placeholder="E-mail" method="POST">
+						<label id="phone_label" for="phone" class="ui-hidden-accessible">Phone Number:</label>
+						<input type="text" name="phonenumber" id="phone_field" placeholder="Phone Number" method="POST">
+						<label id="address_label" for="address" class="ui-hidden-accessible">Address:</label>
+						<input type="text" name="address" id="address_field" placeholder="Address" method="POST">
+						<input id="submit" type="submit" data-inline="true" value="Submit" onclick="checkForm();">
+					</div>
+				</form>
+			</div>
+		</div>
+			
+		<div class="container">
+			<table class="table" style="overflow: hidden;">
+				<thead>
+					<tr>
+						<th>Firstname</th>
+						<th>Lastname</th>
+						<th>Email Address</th>
+						<th>Phone number</th>
+						<th>Address</th>
+					</tr>
+				</thead>
+				<tbody id="contactTable">
+				<!-- Controller will handle filling in the body-->
+				</tbody>
+			</table>
+		</div>                    
+	</div>    
+    <center><p id="#myContainer"></p></center>
+    
+</body>
+</html>
