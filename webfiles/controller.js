@@ -1,4 +1,35 @@
-﻿function signOut(){
+﻿// Search For Contacts
+function searchContact()
+{
+    var srch = document.getElementById("searchText").value;
+
+    $.ajax({
+        type: 'POST',
+        url: 'search.php',
+        data: {
+            search: srch,
+        },
+
+        success: function (data) {
+            var json = data;
+            
+            if(json == "fail"){
+                document.getElementById("contactTable").innerHTML = "<tr><td></td><td></td><td></td><td>No contacts found.</td><td></td></tr>";
+            }
+            else{
+                var obj = JSON.parse(json);
+                var arrayLength = obj.length;
+                document.getElementById("contactTable").innerHTML = "";
+                // populates the contact table
+                for(var i = 0; i < arrayLength; i++)
+                    document.getElementById("contactTable").innerHTML += "<tr><td>" + obj[i]["firstname"] + "</td><td>" + obj[i]["lastname"] + "</td><td>" + obj[i]["email"] + "</td><td>" + obj[i]["phone"] + "</td><td>" + obj[i]["address"] + "</td><td></tr>";
+            }
+        }
+    });
+
+}
+// implemented signout functionality
+function signOut(){
     window.location.href = "./index.htm";
 }
 
@@ -175,7 +206,7 @@ function processSubmit(contact) {
     	},
 
         success: function (data) {
-            //alert(data);
+            alert(data);
             alert("Sucessfully added contact");
             //document.getElementById("#myContainer").innerHTML = data;
             document.getElementById("contactTable").innerHTML += "<tr><td>" + contact.firstname + "</td><td>" + contact.lastname + "</td><td>" + contact.email + "</td><td>" + contact.phone + "</td><td>" + contact.address + "</td><td></tr>";
