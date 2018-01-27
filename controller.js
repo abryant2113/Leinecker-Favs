@@ -1,4 +1,12 @@
-﻿function signOut(){
+﻿var urlBase = 'http://192.241.145.198';
+var extension = "php";
+
+var userId = 0;
+var firstName = "";
+var lastName = "";
+
+
+function signOut(){
     window.location.href = "./index.htm";
 }
 
@@ -24,134 +32,208 @@ function populateTable(){
             for(var i = 0; i < arrayLength; i++)
 			{
                 document.getElementById("contactTable").innerHTML += "<form method=\"post\"><tr class=\"dropdown\"><td>" + obj[i]["firstname"] + "</td><td>" + obj[i]["lastname"] + "</td><td>" 
-					+ obj[i]["email"] + "</td><td>" + obj[i]["phone"] + "</td><td>" + obj[i]["address"] 
-						+ "</td><td><div class=\"dropdownContent\"><button type=\"submit\" onclick=edit()>Edit</button><button type=\"submit\" onclick=deleteContact(this)>Delete</button></div></tr></form>";
-        
+					+ obj[i]["email"] + "</td><td>" + obj[i]["phone"] + "</td><td>" + obj[i]["address"] + "</td><td style=\"display:none;\">" + obj[i]["cid"]
+						+ "</td><td><div class=\"dropdownContent\"><button type=\"reset\" onclick=edit()>Edit</button><button type=\"reset\" onclick=deleteContact(this)>Delete</button></div></tr></form>";      
 			}
 		}
     });
 }
 
-// handles the submission user login data from the client to the server
-function processLogin() {
+function processLogin()
+{
+    userId = 0;
+    firstName = "";
+    lastName = "";
+    
+    var login = document.getElementById("inputEmail").value;
+    var password = document.getElementById("inputPassword").value;
+    
+    var specReg = /[^A-Za-z0-9 ]/;
 
-    var user_field = document.getElementById("inputEmail").value;
-    var pass_field = document.getElementById("inputPassword").value;
+    // checks for invalid characters in login attempt
+    if(specReg.test(login) || specReg.test(password))
+    {
+        alert("Invalid characters found. Please try again.");
+        return;
+    }
 
-    $.ajax({
-        type: 'POST',
-        url: 'script.php',
-        data: {
-			action: 'login',
-            user: user_field,
-            pass: pass_field,
-        },
+    var jsonPayload = '{"login" : "' + login + '", "password" : "' + password + '"}';
+    var url = urlBase + '/auth.' + extension;
+    
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", url, false);
+    xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
 
-        success: function (data) {
-            // checks to see if the password was valid or not
-            var json = data;
-            var obj = JSON.parse(json);
+    try
+    {
+        xhr.send(jsonPayload);
+        var jsonObject = JSON.parse( xhr.responseText );
 
-            current_user = obj["current_user"];
-            document.cookie = current_user;
-
-            if (obj["result"] == "Verified"){
-                window.location.href = "./contact.htm";
-            }
-            else
-                alert("Invalid credentials.");
+        if(jsonObject["error"] != null)
+        {
+            alert("User/Password combination incorrect");
+            return;
         }
-    });
+        user = jsonObject[0]["user"];
+        document.cookie = user;
+        window.location.href = "./contact.htm";
+    }
+    catch(err)
+    {
+        alert(err.message);
+    }  
+}
+
+// checks for valid email using regex
+function validateEmail(email) 
+{
+    var re = /\S+@\S+\.\S+/;
+    return re.test(email);
 }
 
 // handles the creating of a new account -------------------------------------------------------------------------------------------------------
 function createAccount() {
 	
-    var firstname = document.getElementById("firstname").value;
-    var lastname = document.getElementById("lastname").value;
-	var email = document.getElementById("email").value;
-	var username = document.getElementById("username").value;
-    var pass = document.getElementById("password").value;
-	
-	$.ajax({
-        type: 'POST',
-        url: 'script.php',
-        data: {
-			action: 'create',
-            firstname: firstname,
-			lastname: lastname,
-			email: email,
-			username: username,
-            pass: pass,
-        },
+    var firstname = document.getElementById("firstname");
+    var lastname = document.getElementById("lastname");
+	  var email = document.getElementById("email");
+    var phone = document.getElementById("phone");
+	  var username = document.getElementById("username");
+    var pass = document.getElementById("password");
+    var confirm = document.getElementById("confirm");
 
-        success: function (data) {
-			
-            // checks to see if the password was valid or not
-            if (data == "Verified")
-                window.location.href = "./index.htm";
-            else
-                alert(data);
+    var fieldArray = [firstname, lastname, email, phone, username, pass, confirm];
+    var validate = true;
+    var specReg = /[^A-Za-z0-9 ]/;
+
+    // for loop will iterate through all input fields and check to make sure that they are filled out
+    for(var i = 0; i < 7; i++){
+        
+        var curVal = fieldArray[i].value;
+
+        // checks to ensure that the fields are populated
+        if(curVal.length <= 0){
+            alert("Please fill out all fields before submitting.");
+            validate = false;
+            break;
         }
-    });
+
+        // checks against email addresses
+        if(i == 2){
+            if(!validateEmail(fieldArray[i].value)){
+                alert("Invalid Email Address.");
+                validate = false;
+                break;
+            }
+        }
+        else if(specReg.test(fieldArray[i].value))
+        {
+            alert(fieldArray[i].value);
+            alert("Invalid character(s) found. Please try again.");
+            validate = false;
+            break;
+        }
+    }
+
+    // checks to see if the two password fields match.
+    if(validate && (fieldArray[5].value != fieldArray[6].value)){
+        alert("Password fields do not match. Please try again.");
+        validate = false;
+    }
+	
+    // only run the jquery 
+    if(validate){
+
+        $.ajax({
+            type: 'POST',
+            url: 'script.php',
+            data: {
+                action: 'create',
+                firstname: firstname.value,
+                lastname: lastname.value,
+                email: email.value,
+                username: username.value,
+                pass: pass.value,
+            },
+
+            success: function (data) {
+                
+                // checks to see if the password was valid or not
+                if (data == "Verified")
+                    window.location.href = "./index.htm";
+                else
+                    alert(data);
+            }
+        });
+
+    }
+
+    // clears all forms
+    for(var j = 0; j < 7; j++)
+        fieldArray[j].value = '';
+    	
 }
 
-// Handles entering a new contacct for the user -------------------------------------------------------------------------------
-
+// Handles entering a new contact for the user -------------------------------------------------------------------------------
 function checkForm() {
 	
     // Selects the input typed into the text fields
-    var firstname_input = document.getElementById("firstname_field").value;
-	var lastname_input = document.getElementById("lastname_field").value;
-    var email_input = document.getElementById("email_field").value;
-    var phone_input = document.getElementById("phone_field").value;
-    var address_input = document.getElementById("address_field").value;
-
+    var firstname_input = document.getElementById("firstname_field");
+	  var lastname_input = document.getElementById("lastname_field");
+    var email_input = document.getElementById("email_field");
+    var phone_input = document.getElementById("phone_field");
+    var address_input = document.getElementById("address_field");
+  
     // Select the labels that are ontop of the textfields, will turn red if
     // incorrect information has been entered
     var firstname_label = document.getElementById("firstname_label");
-	var lastname_label = document.getElementById("lastname_label");
+	 var lastname_label = document.getElementById("lastname_label");
     var email_label = document.getElementById("email_label");
     var phone_label = document.getElementById("phone_label");
     var address_label = document.getElementById("address_label");
 
     var validate = true;
+    var specReg = /[^A-Za-z0-9 ]/;
+    var fieldArray = [firstname_input, lastname_input, email_input, phone_input, address_input];
 
-    if (firstname_input == "") {
-      //  name_label.style.color = "red";
-        //name_label.style.fontStyle = "bold";
-        validate = false;
-    }
-	if (lastname_input == "") {
-        //name_label.style.color = "red";
-        //name_label.style.fontStyle = "bold";
-        validate = false;
-    }
-    if (email_input == "") {
-        //email_label.style.color = "red";
-        //email_label.style.fontStyle = "bold";
-        validate = false;
-    }
-    if (phone_input == "") {
-    //    phone_label.style.color = "red";
-      //  phone_label.style.fontStyle = "bold";
-        validate = false;
-    }
-    if (address_input == "") {
-        //address_label.style.color = "red";
-        //address_label.style.fontStyle = "bold";
-        validate = false;
-    }
+    // iterates through all of the inputs to make sure that all fields are filled out
+    for(var i = 0; i < 5; i++){
+                
+        var curVal = fieldArray[i].value;
 
-    if (!validate) {
-        alert("Please fill out all fields before submitting.");
-        return false;
+        if(curVal.length <= 0){
+            alert("Please fill out all fields before submitting.");
+            validate = false;
+            break;
+        }
+
+        // checks for invalid email addresses
+        if(i == 2){
+            if(!validateEmail(fieldArray[i].value)){
+                alert("Invalid Email Address.");
+                validate = false;
+                break;
+            }
+        }
+        else if(specReg.test(fieldArray[i].value))
+        {
+            alert(fieldArray[i].value);
+            alert("Invalid character(s) found. Please try again.");
+            validate = false;
+            break;
+        }
+
     }
 	
     // if all of the appropriate data is filled out then we can create our contact object and call the data submission function
-    var contact = new contactObject(firstname_input, lastname_input, email_input, phone_input, address_input);
-    processSubmit(contact);
-	
+    if(validate){
+        var contact = new contactObject(firstname_input.value, lastname_input.value, email_input.value, phone_input.value, address_input.value);
+        processSubmit(contact);
+    }
+
+    // clears all of the fields on both success and failed add contact attempts
+    for(var j = 0; j < 5; j++)
+        fieldArray[j].value = '';
 }
 
 
@@ -181,23 +263,31 @@ function processSubmit(contact) {
     	},
 
         success: function (data) {
-            alert("Sucessfully added contact");
-            //document.getElementById("#myContainer").innerHTML = data;
-            document.getElementById("contactTable").innerHTML += "<tr><td>" + contact.firstname + "</td><td>" + contact.lastname + "</td><td>" + contact.email + "</td><td>" + contact.phone + "</td><td>" + contact.address + "</td><td></tr>";
-			document.getElementById("myForm").reset();
+            document.getElementById("contactTable").innerHTML = "";
+            populateTable();
 		}
     });
 }
+
 // Search For Contacts
 function searchContact()
 {
     var srch = document.getElementById("searchText").value;
+    var current_user = document.cookie;
+    var specReg = /[^A-Za-z0-9 ]/;
+
+    // doesn't allow invalid searches
+    if(specReg.test(srch)){
+        alert("Invalid character(s) found. Please only use alphanumerics while searching.");
+        return;
+    }
 
     $.ajax({
         type: 'POST',
         url: 'search.php',
         data: {
             search: srch,
+            current_user: current_user,
         },
 
         success: function (data) {
@@ -213,9 +303,8 @@ function searchContact()
                 // populates the contact table
                 for(var i = 0; i < arrayLength; i++)
                     document.getElementById("contactTable").innerHTML += "<form method=\"post\"><tr class=\"dropdown\"><td>" + obj[i]["firstname"] + "</td><td>" + obj[i]["lastname"] + "</td><td>" 
-					+ obj[i]["email"] + "</td><td>" + obj[i]["phone"] + "</td><td>" + obj[i]["address"] 
-						+ "</td><td><div class=\"dropdownContent\"><button type=\"submit\" onclick=edit()>Edit</button><button type=\"submit\" onclick=deleteContact(this)>Delete</button></div></tr></form>";
-        
+					+ obj[i]["email"] + "</td><td>" + obj[i]["phone"] + "</td><td>" + obj[i]["address"] + "</td><td style=\"display:none;\">" + obj[i]["cid"]
+						+ "</td><td><div class=\"dropdownContent\"><button type=\"reset\" onclick=edit()>Edit</button><button type=\"reset\" onclick=deleteContact(this)>Delete</button></div></tr></form>";  
             }
         }
     });
@@ -229,9 +318,8 @@ function deleteContact(r)
 {
 	var x = r.parentNode.parentNode.parentNode.rowIndex;
 	
-	y = document.getElementById('contactTable').rows[x - 1].cells[3].innerHTML;
+	y = document.getElementById('contactTable').rows[x - 1].cells[5].innerHTML;
 
-	
 	var current_user = document.cookie;
 
     $.ajax({
@@ -245,9 +333,8 @@ function deleteContact(r)
 
         success: function (data) {
             alert("Sucessfully deleted contact");
-			document.getElementById('contactTable').innerHTML = "";
-			populateTable();
+            document.getElementById("contactTable").innerHTML = "";
+            populateTable();
 		}
-    });
-	
+    });	
 }

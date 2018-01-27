@@ -1,13 +1,11 @@
 <?php
-	STATIC $current_user;
-	
+
 	// Switch command
 	if(isset($_POST['action']) && !empty($_POST['action'])) {
 
 		$action = $_POST['action'];
-
+    
 		switch($action) {
-			case 'login' : login_user();break;
 			case 'create' : create_user();break;
 			case 'add' : add_contact();break;
 			case 'populate' : populate_table();break;
@@ -17,11 +15,11 @@
 	
 	function populate_table(){
 		
-		// db deets
-		$servername = "localhost";
-		$username = "root";
+		// DB deets would go below -- make sure your database matches the one Joe made if you're going to run this locally.
+		$servername = "";
+		$username = "";
 		$password = "";
-		$db = "cop4331";
+		$db = "";
 
 		// grabs the current user's info
 		$current_user = $_POST['current_user'];
@@ -33,76 +31,31 @@
 		if(!$conn)
 			die('Error, could not connect:');
 
-		$sql = "SELECT firstname, lastname, phone, email, address FROM contacts WHERE username_link = '$current_user'";
+		// using prepared statements to guard against sql injection attacks
+		$sql = $conn->prepare("SELECT first_name, last_name, phone, email, address, cid FROM contacts WHERE username_link = ?");
+		$sql->bind_param("s", $current_user);
 
-		$result = $conn->query($sql);
+		$sql->execute();
+		$result = $sql->get_result();
+
 		$my_arr = array();
 
-		while($row = mysqli_fetch_array($result))
+		while($row = $result->fetch_assoc())
 		{
 			$my_arr[] = array(
-					'firstname' => $row['firstname'],
-					'lastname' => $row['lastname'],
+					'firstname' => $row['first_name'],
+					'lastname' => $row['last_name'],
 					'phone' => $row['phone'],
 					'email' => $row['email'],
-					'address' => $row['address']
+					'address' => $row['address'],
+					'cid' => $row['cid']
 				);
 		}
 		echo json_encode($my_arr);
-	}
-
-	function login_user(){
-		
-	
-		// ajax post data containing user and pass input
-		
-		$unverified_username = $_POST['user'];
-		$unverified_password = $_POST['pass'];
-		// hashes the password using php's built-in crypt function
-		$hashed_unver_pass = crypt($unverified_password, 'CRYPT_BLOWFISH');
-		
-		// db deets
-		$servername = "localhost";
-		$username = "root";
-		$password = "";
-		$db = "cop4331";
-	   
-		// Establishing the connection
-		$conn = mysqli_connect($servername, $username, $password, $db); 
-		
-		 // terminates if the connection fails
-		if(!$conn)
-			die('Error, could not connect:');
-
-		if($conn){
-			$username = $unverified_username;
-			$sql = "SELECT username, password FROM users WHERE username = '$unverified_username'";
-			$result = $conn->query($sql);
-			
-			if(!$result)
-				echo "Username does not exist";
-			
-			$row = $result->fetch_assoc();
-			$verified_username = $row["username"];
-			$verified_password = $row["password"];
-			
-			$hashed_ver_pass = $verified_password;
-        
-			// Password verification
-			if($hashed_unver_pass != $hashed_ver_pass)
-				$result = "Incorrect password.";
-			else
-				$result = "Verified";
-			
-			#$current_user = $verified_username;
-			echo json_encode(array(
-					'result' => $result,
-					'current_user' => $verified_username
-				));
-		}
 		$conn->close();
+		$sql->close();
 	}
-	
+
 	function create_user(){
 		
 		// ajax post data containing user and pass input
@@ -112,13 +65,12 @@
 		$user = $_POST['username'];
 		$pass = $_POST['pass'];
 		
-
-		// db deets
-		$servername = "localhost";
-		$username = "root";
+		// DB deets would go below -- make sure your database matches the one Joe made if you're going to run this locally.
+		$servername = "";
+		$username = "";
 		$password = "";
-		$db = "cop4331";
-	   
+		$db = "";
+   
 		// Establishing the connection
 		$conn = mysqli_connect($servername, $username, $password, $db); 
 		
@@ -126,9 +78,11 @@
 		if(!$conn)
 			die('Error, could not connect:');
 
-		// queries database to check for valid user
-		$sql = "SELECT username, password FROM users WHERE username = '$user'";
-		$result = $conn->query($sql);
+		// using prepared statements to guard against sql injection attacks
+		$sql = $conn->prepare("SELECT username, password FROM users WHERE username = ?");
+		$sql->bind_param("s", $user);
+		$sql->execute();
+		$result = $sql->get_result();
 		
 		if(!$result)
 			echo "Error";		
@@ -141,23 +95,26 @@
 			
 			// hashing the password and inserting into the db
 			$hashed_pass = crypt($pass, 'CRYPT_BLOWFISH');
-			$sql = "INSERT into users (username, password, firstname, lastname, email) VALUES ('$user', '$hashed_pass', '$firstname', '$lastname', '$email')";	
-			$result = $conn->query($sql);
+			
+			$sql = $conn->prepare("INSERT into users (username, password, first_name, last_name, email) VALUES (?, ?, ?, ?, ?)");
+			$sql->bind_param("sssss", $user, $hashed_pass, $firstname, $lastname, $email);
+			$sql->execute();
+			
 			// test to see if insertion was successful
-			if($result)
+			if($sql)
 				echo "Verified";
-		
 
+		$sql->close();
 		$conn->close();
 	}
 
 	function add_contact(){
 		
-		 // db deets
-		$servername = "localhost";
-		$username = "root";
+		// DB deets would go below -- make sure your database matches the one Joe made if you're going to run this locally.
+		$servername = "";
+		$username = "";
 		$password = "";
-		$db = "cop4331";
+		$db = "";
 	
 		// change this portion
 		//$contact_json = file_get_contents('php://input');
@@ -179,110 +136,45 @@
 			$new_email = $contact_info->email;
 			$new_address = $contact_info->address;
 			
-			$sql = "INSERT INTO contacts(firstname, lastname, phone, email, address, username_link) VALUES ('$new_first', '$new_last', '$new_phone', '$new_email', '$new_address', '$current_user')";
-			
-			$check = $conn->query($sql);
-			if(!$check)
+			$sql = $conn->prepare("INSERT INTO contacts(first_name, last_name, phone, email, address, username_link) VALUES (?, ?, ?, ?, ?, ?)");
+			$sql->bind_param("ssssss", $new_first, $new_last, $new_phone, $new_email, $new_address, $current_user);
+			$sql->execute();
+		
+			if(!$sql)
 				echo "Fatal Error";
 		}
+
+		$sql->close();
 		$conn->close();
 	}
 	
-	function search()
-	{
-		$inData = getRequestInfo();
-
-		$searchResults = "";
-		$searchCount = 0;
-		// db deets
-		$servername = "localhost";
-		$username = "root";
-		$password = "";
-		$db = "cop4331";
-
-		$search_val = $_POST['Search'];
-
-		// Establishing the connection
-		$conn = mysqli_connect($servername, $username, $password, $db);
-
-		if ($conn->connect_error)
-		{
-			returnWithError( $conn->connect_error );
-		}
-		else
-		{
-			$sql = "SELECT * FROM contacts WHERE firstname = '$search_val'";
-
-			$result = $conn->query($sql);
-
-			if ($result->num_rows > 0)
-			{
-				while($row = $result->fetch_assoc())
-				{
-					if( $searchCount > 0 )
-					{
-						$searchResults .= ",";
-					}
-					$searchCount++;
-					$searchResults .= '"' . $row["firstname"] . '"';
-				}
-			}
-			else
-			{
-				returnWithError( "No Records Found" );
-			}
-			$conn->close();
-		}
-
-		returnWithInfo( $searchResults );
-
-		function getRequestInfo()
-		{
-			return json_decode(file_get_contents('php://input'), true);
-		}
-
-		function sendResultInfoAsJson( $obj )
-		{
-			header('Content-type: application/json');
-			echo $obj;
-		}
-
-		function returnWithError( $err )
-		{
-			$retValue = '{"id":0,"firstName":"","lastName":"","error":"' . $err . '"}';
-			sendResultInfoAsJson( $retValue );
-		}
-
-		function returnWithInfo( $searchResults )
-		{
-			$retValue = '{"results":[' . $searchResults . '],"error":""}';
-			sendResultInfoAsJson( $retValue );
-		}
-	}
 
 	function delete_contact()
 	{
-		// db deets
-		$servername = "localhost";
-		$username = "root";
+		// DB deets would go below -- make sure your database matches the one Joe made if you're going to run this locally.
+		$servername = "";
+		$username = "";
 		$password = "";
-		$db = "cop4331";
-		
+		$db = "";
+	
 		$phone = $_POST['phone'];
 		$current_user = $_POST['current_user'];
 		
 		$conn = mysqli_connect($servername, $username, $password, $db);
+	
 		// terminates if the connection fails
 		if(!$conn)
-			die('Error, could not connect:');
+			die('Error, could not connect.');
 
-		
-		$sql = "DELETE from contacts where phone = $phone";
+		$sql = $conn->prepare("DELETE from contacts where cid = ? and username_link = ?");
+		$sql->bind_param("ss", $phone, $current_user);
+		$sql->execute();
 			
-		$check = $conn->query($sql);
-		if(!$check)
+		// checks to make sure that the sql statement was successful
+		if(!$sql)
 			echo "Fatal Error";
 		
+		$sql->close();
 		$conn->close();
 	}
 ?>

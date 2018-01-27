@@ -65,7 +65,7 @@
 					</script>
 					
 			<div data-role="popup" id="myPopup" class="ui-content" style="min-width:250px;">
-				<form method="post" action="/action_page_post.php">
+				<form>
 					<div>
 						<h3>Add a Contact</h3>
 						<label id="firstname_label" for="name" class="ui-hidden-accessible">Firstname:</label>
@@ -78,6 +78,9 @@
 						<input type="text" name="phonenumber" id="phone_field" placeholder="Phone Number" method="POST">
 						<label id="address_label" for="address" class="ui-hidden-accessible">Address:</label>
 						<input type="text" name="address" id="address_field" placeholder="Address" method="POST">
+						<a href="#myPopup" data-rel="back">
+							<input id="submit" type="reset" data-inline="true" value="Submit" onclick="checkForm();">
+						</a>
 						<input id="submit" type="submit" data-inline="true" value="Submit" onclick="checkForm();">
 					</div>
 				</form>
