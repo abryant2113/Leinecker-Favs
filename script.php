@@ -4,7 +4,7 @@
 	if(isset($_POST['action']) && !empty($_POST['action'])) {
 
 		$action = $_POST['action'];
-		
+    
 		switch($action) {
 			case 'create' : create_user();break;
 			case 'add' : add_contact();break;
@@ -65,20 +65,18 @@
 		$user = $_POST['username'];
 		$pass = $_POST['pass'];
 		
-
 		// DB deets would go below -- make sure your database matches the one Joe made if you're going to run this locally.
 		$servername = "";
 		$username = "";
 		$password = "";
 		$db = "";
-	   
+   
 		// Establishing the connection
 		$conn = mysqli_connect($servername, $username, $password, $db); 
 		
 		 // terminates if the connection fails
 		if(!$conn)
 			die('Error, could not connect:');
-
 
 		// using prepared statements to guard against sql injection attacks
 		$sql = $conn->prepare("SELECT username, password FROM users WHERE username = ?");
@@ -158,12 +156,12 @@
 		$username = "";
 		$password = "";
 		$db = "";
-		
+	
 		$phone = $_POST['phone'];
 		$current_user = $_POST['current_user'];
 		
 		$conn = mysqli_connect($servername, $username, $password, $db);
-		
+	
 		// terminates if the connection fails
 		if(!$conn)
 			die('Error, could not connect.');

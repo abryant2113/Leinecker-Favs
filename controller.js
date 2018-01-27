@@ -33,8 +33,7 @@ function populateTable(){
 			{
                 document.getElementById("contactTable").innerHTML += "<form method=\"post\"><tr class=\"dropdown\"><td>" + obj[i]["firstname"] + "</td><td>" + obj[i]["lastname"] + "</td><td>" 
 					+ obj[i]["email"] + "</td><td>" + obj[i]["phone"] + "</td><td>" + obj[i]["address"] + "</td><td style=\"display:none;\">" + obj[i]["cid"]
-						+ "</td><td><div class=\"dropdownContent\"><button type=\"reset\" onclick=edit()>Edit</button><button type=\"reset\" onclick=deleteContact(this)>Delete</button></div></tr></form>";
-        
+						+ "</td><td><div class=\"dropdownContent\"><button type=\"reset\" onclick=edit()>Edit</button><button type=\"reset\" onclick=deleteContact(this)>Delete</button></div></tr></form>";      
 			}
 		}
     });
@@ -97,9 +96,9 @@ function createAccount() {
 	
     var firstname = document.getElementById("firstname");
     var lastname = document.getElementById("lastname");
-	var email = document.getElementById("email");
+	  var email = document.getElementById("email");
     var phone = document.getElementById("phone");
-	var username = document.getElementById("username");
+	  var username = document.getElementById("username");
     var pass = document.getElementById("password");
     var confirm = document.getElementById("confirm");
 
@@ -176,20 +175,19 @@ function createAccount() {
 }
 
 // Handles entering a new contact for the user -------------------------------------------------------------------------------
-
 function checkForm() {
 	
     // Selects the input typed into the text fields
     var firstname_input = document.getElementById("firstname_field");
-	var lastname_input = document.getElementById("lastname_field");
+	  var lastname_input = document.getElementById("lastname_field");
     var email_input = document.getElementById("email_field");
     var phone_input = document.getElementById("phone_field");
     var address_input = document.getElementById("address_field");
-
+  
     // Select the labels that are ontop of the textfields, will turn red if
     // incorrect information has been entered
     var firstname_label = document.getElementById("firstname_label");
-	var lastname_label = document.getElementById("lastname_label");
+	 var lastname_label = document.getElementById("lastname_label");
     var email_label = document.getElementById("email_label");
     var phone_label = document.getElementById("phone_label");
     var address_label = document.getElementById("address_label");
@@ -236,7 +234,6 @@ function checkForm() {
     // clears all of the fields on both success and failed add contact attempts
     for(var j = 0; j < 5; j++)
         fieldArray[j].value = '';
-
 }
 
 
@@ -307,8 +304,7 @@ function searchContact()
                 for(var i = 0; i < arrayLength; i++)
                     document.getElementById("contactTable").innerHTML += "<form method=\"post\"><tr class=\"dropdown\"><td>" + obj[i]["firstname"] + "</td><td>" + obj[i]["lastname"] + "</td><td>" 
 					+ obj[i]["email"] + "</td><td>" + obj[i]["phone"] + "</td><td>" + obj[i]["address"] + "</td><td style=\"display:none;\">" + obj[i]["cid"]
-						+ "</td><td><div class=\"dropdownContent\"><button type=\"reset\" onclick=edit()>Edit</button><button type=\"reset\" onclick=deleteContact(this)>Delete</button></div></tr></form>";
-        
+						+ "</td><td><div class=\"dropdownContent\"><button type=\"reset\" onclick=edit()>Edit</button><button type=\"reset\" onclick=deleteContact(this)>Delete</button></div></tr></form>";  
             }
         }
     });
@@ -324,7 +320,6 @@ function deleteContact(r)
 	
 	y = document.getElementById('contactTable').rows[x - 1].cells[5].innerHTML;
 
-	
 	var current_user = document.cookie;
 
     $.ajax({
