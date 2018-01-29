@@ -7,12 +7,11 @@
 	$lastName = "";
 	$working = "None";
 
-	// DB deets would go below -- make sure your database matches the one Joe made if you're going to run this locally.
-	$servername = "";
-	$username = "";
-	$password = "";
-	$db = "";
-
+	$servername = "contactmanager-db.mysql.database.azure.com";
+	$username = "cmadmin@contactmanager-db";
+	$password = "5proc!$0oS21";
+	$db = "contact_manager";
+	
 	// hashes the password using php's built-in crypt function
 	$hashed_unver_pass = crypt($inData["password"], 'CRYPT_BLOWFISH');
 
@@ -66,7 +65,7 @@
 		$my_arr[] = array(
 					'user' => $user,
 					'pass' => $pass,
-					'error' => $working
+					'error' => "None"
 				);
 		$json = json_encode($my_arr);
 		sendResultInfoAsJson( $json );
