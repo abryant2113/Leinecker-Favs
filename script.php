@@ -4,7 +4,7 @@
 	if(isset($_POST['action']) && !empty($_POST['action'])) {
 
 		$action = $_POST['action'];
-    
+		
 		switch($action) {
 			case 'create' : create_user();break;
 			case 'add' : add_contact();break;
@@ -15,11 +15,11 @@
 	
 	function populate_table(){
 		
-		// DB deets would go below -- make sure your database matches the one Joe made if you're going to run this locally.
-		$servername = "";
-		$username = "";
-		$password = "";
-		$db = "";
+		// db deets
+		$servername = "contactmanager-db.mysql.database.azure.com";
+		$username = "cmadmin@contactmanager-db";
+		$password = "5proc!$0oS21";
+		$db = "contact_manager";
 
 		// grabs the current user's info
 		$current_user = $_POST['current_user'];
@@ -65,18 +65,20 @@
 		$user = $_POST['username'];
 		$pass = $_POST['pass'];
 		
-		// DB deets would go below -- make sure your database matches the one Joe made if you're going to run this locally.
-		$servername = "";
-		$username = "";
-		$password = "";
-		$db = "";
-   
+
+		// db deets
+		$servername = "contactmanager-db.mysql.database.azure.com";
+		$username = "cmadmin@contactmanager-db";
+		$password = "5proc!$0oS21";
+		$db = "contact_manager";
+	   
 		// Establishing the connection
 		$conn = mysqli_connect($servername, $username, $password, $db); 
 		
 		 // terminates if the connection fails
 		if(!$conn)
 			die('Error, could not connect:');
+
 
 		// using prepared statements to guard against sql injection attacks
 		$sql = $conn->prepare("SELECT username, password FROM users WHERE username = ?");
@@ -110,11 +112,11 @@
 
 	function add_contact(){
 		
-		// DB deets would go below -- make sure your database matches the one Joe made if you're going to run this locally.
-		$servername = "";
-		$username = "";
-		$password = "";
-		$db = "";
+		 // db deets
+		$servername = "contactmanager-db.mysql.database.azure.com";
+		$username = "cmadmin@contactmanager-db";
+		$password = "5proc!$0oS21";
+		$db = "contact_manager";
 	
 		// change this portion
 		//$contact_json = file_get_contents('php://input');
@@ -151,17 +153,17 @@
 
 	function delete_contact()
 	{
-		// DB deets would go below -- make sure your database matches the one Joe made if you're going to run this locally.
-		$servername = "";
-		$username = "";
-		$password = "";
-		$db = "";
-	
+		// db deets
+		$servername = "contactmanager-db.mysql.database.azure.com";
+		$username = "cmadmin@contactmanager-db";
+		$password = "5proc!$0oS21";
+		$db = "contact_manager";
+		
 		$phone = $_POST['phone'];
 		$current_user = $_POST['current_user'];
 		
 		$conn = mysqli_connect($servername, $username, $password, $db);
-	
+		
 		// terminates if the connection fails
 		if(!$conn)
 			die('Error, could not connect.');
