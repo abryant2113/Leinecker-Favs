@@ -33,7 +33,7 @@ function populateTable(){
 			{
                 document.getElementById("contactTable").innerHTML += "<form method=\"post\"><tr class=\"dropdown\"><td>" + obj[i]["firstname"] + "</td><td>" + obj[i]["lastname"] + "</td><td>" 
 					+ obj[i]["email"] + "</td><td>" + obj[i]["phone"] + "</td><td>" + obj[i]["address"] + "</td><td style=\"display:none;\">" + obj[i]["cid"]
-						+ "</td><td><div class=\"dropdownContent\"><button type=\"reset\" onclick=edit()>Edit</button><button type=\"reset\" onclick=deleteContact(this)>Delete</button></div></tr></form>";
+						+ "</td><td><button type=\"reset\" onclick=deleteContact(this) id=\"delete-btn\">Delete</button></tr></form>";
         
 			}
 		}
@@ -304,10 +304,11 @@ function searchContact()
                 document.getElementById("contactTable").innerHTML = "";
                 // populates the contact table
                 for(var i = 0; i < arrayLength; i++)
-                    document.getElementById("contactTable").innerHTML += "<form method=\"post\"><tr class=\"dropdown\"><td>" + obj[i]["firstname"] + "</td><td>" + obj[i]["lastname"] + "</td><td>" 
+				{
+					document.getElementById("contactTable").innerHTML += "<form method=\"post\"><tr class=\"dropdown\"><td>" + obj[i]["firstname"] + "</td><td>" + obj[i]["lastname"] + "</td><td>" 
 					+ obj[i]["email"] + "</td><td>" + obj[i]["phone"] + "</td><td>" + obj[i]["address"] + "</td><td style=\"display:none;\">" + obj[i]["cid"]
-						+ "</td><td><div class=\"dropdownContent\"><button type=\"reset\" onclick=edit()>Edit</button><button type=\"reset\" onclick=deleteContact(this)>Delete</button></div></tr></form>";
-        
+						+ "</td><td><button type=\"reset\" onclick=deleteContact(this) id=\"delete-btn\">Delete</button></tr></form>";
+				}
             }
         }
     });
@@ -319,7 +320,7 @@ function searchContact()
 
 function deleteContact(r)
 {
-	var x = r.parentNode.parentNode.parentNode.rowIndex;
+	var x = r.parentNode.parentNode.rowIndex;
 	
 	y = document.getElementById('contactTable').rows[x - 1].cells[5].innerHTML;
 
