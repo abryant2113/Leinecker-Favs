@@ -20,8 +20,8 @@
 	else
 	{
 		// prepared statement to defend against sql injection attacks
-		$sql = $conn->prepare("SELECT * FROM contacts WHERE first_name LIKE CONCAT (?, '%') and username_link = ?");
-		$sql->bind_param("ss", $search_val, $current_user);
+		$sql = $conn->prepare("SELECT * FROM contacts WHERE first_name LIKE CONCAT (?, '%') OR last_name LIKE CONCAT (?, '%') and username_link = ?");
+		$sql->bind_param("sss", $search_val, $search_val, $current_user);
 		$sql->execute();
 		$result = $sql->get_result();
 		$my_arr = array();
