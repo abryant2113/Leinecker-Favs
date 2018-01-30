@@ -16,6 +16,31 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
+	<script>
+            $(function() {
+ 
+                if (localStorage.chkbx && localStorage.chkbx != '') {
+                    $('#remember-me').attr('checked', 'checked');
+                    $('#inputEmail').val(localStorage.inputEmail);
+                } else {
+                    $('#remember-me').removeAttr('checked');
+                    $('#inputEmail').val('');
+                }
+ 
+                $('#remember-me').click(function() {
+ 
+                    if ($('#remember-me').is(':checked')) {
+                        // save username and password
+                        localStorage.inputEmail = $('#inputEmail').val();
+                        localStorage.chkbx = $('#remember-me').val();
+                    } else {
+                        localStorage.inputEmail = '';
+                        localStorage.chkbx = '';
+                    }
+                });
+            });
+        </script>
+
 </head>
 
 <!-- Login form-->
@@ -31,7 +56,7 @@
                         <label for="inputPassword" class="sr-only">Password</label>
                         <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
                         <div class="checkbox">
-                            <label><input type="checkbox" value="remember-me"> Remember me</label>
+                            <label><input type="checkbox" id="remember-me" value="remember-me"> Remember me</label>
                         </div>
                         <button type="reset" onclick=processLogin() id="loginButton" class="btn btn-lg btn-primary btn-block">Sign in</button>
                     </form>
