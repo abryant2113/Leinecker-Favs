@@ -11,7 +11,8 @@
 
 	<link rel="stylesheet" type="text/css" href="style.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+    <!--Contact add form-->
+	<link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
     <link rel="style.css">
 	
 	<!-- javascript controller-->
@@ -20,20 +21,20 @@
     <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
 
 </head>
 
 <body onload="populateTable()">
 
-	<div class="container">
-
-		<div class="header">
+	<div class="header">
 			<h1 id="headerGreeting"></h1>
 			<button onclick="signOut();" class="ui-btn ui-btn-inline ui-corner-all" id="signout" style="float: right;">Sign Out</button>
 		</div>
+	<div class="page">	
+	<div class="container">
 
-	<div class="main" style="padding-top: 80px">
+	<div class="table-top">
 			<div class="row">
 				<!-- Add contact button -->
 				<div class="col-md-4">
@@ -84,8 +85,8 @@
 			</div>
 		</div>
 			
-		<div class="container">
-			<table class="table" style="overflow: hidden;">
+		<div id="table-wrapper">
+			<table class="table">
 				<thead>
 					<tr>
 						<th>Firstname</th>
@@ -93,15 +94,19 @@
 						<th>Email Address</th>
 						<th>Phone number</th>
 						<th>Address</th>
+						<th></th>
 					</tr>
 				</thead>
 				<tbody id="contactTable">
 				<!-- Controller will handle filling in the body-->
 				</tbody>
+				
 			</table>
-		</div>                    
-	</div>    
-    <center><p id="#myContainer"></p></center>
-    
+			
+		</div>                
+	</div>   
+</div>	
+   <!-- <center><p id="#myContainer"></p></center>-->
+ 
 </body>
 </html>

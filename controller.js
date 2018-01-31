@@ -307,7 +307,7 @@ function searchContact()
 				{
 					document.getElementById("contactTable").innerHTML += "<form method=\"post\"><tr class=\"dropdown\"><td>" + obj[i]["firstname"] + "</td><td>" + obj[i]["lastname"] + "</td><td>" 
 					+ obj[i]["email"] + "</td><td>" + obj[i]["phone"] + "</td><td>" + obj[i]["address"] + "</td><td style=\"display:none;\">" + obj[i]["cid"]
-						+ "</td><td><button type=\"reset\" onclick=deleteContact(this) id=\"delete-btn\">Delete</button></tr></form>";
+						+ "</td><td id=\"delete-box\"><button type=\"reset\" onclick=deleteContact(this) id=\"delete-btn\">Delete</button></tr></form>";
 				}
             }
         }
