@@ -1,4 +1,5 @@
-﻿var urlBase = '';
+﻿//var urlBase = 'http://cop4331groupeight.com';
+var urlBase = '';
 var extension = "php";
 
 var userId = 0;

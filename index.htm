@@ -1,3 +1,4 @@
+﻿
 <!doctype html>
 <html lang="en">
 
@@ -16,6 +17,54 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
+	<script>
+
+            $(function() {
+
+ 
+
+                if (localStorage.chkbx && localStorage.chkbx != '') {
+
+                    $('#remember-me').attr('checked', 'checked');
+
+                    $('#inputEmail').val(localStorage.inputEmail);
+
+                } else {
+
+                    $('#remember-me').removeAttr('checked');
+
+                    $('#inputEmail').val('');
+
+                }
+
+ 
+
+                $('#remember-me').click(function() {
+
+ 
+
+                    if ($('#remember-me').is(':checked')) {
+
+                        // save username and password
+
+                        localStorage.inputEmail = $('#inputEmail').val();
+
+                        localStorage.chkbx = $('#remember-me').val();
+
+                    } else {
+
+                        localStorage.inputEmail = '';
+
+                        localStorage.chkbx = '';
+
+                    }
+
+                });
+
+            });
+
+        </script>
+	
 </head>
 
 <!-- Login form-->
@@ -31,23 +80,23 @@
                         <label for="inputPassword" class="sr-only">Password</label>
                         <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
                         <div class="checkbox">
-                            <label><input type="checkbox" value="remember-me"> Remember me</label>
+                            <label><input type="checkbox" id="remember-me" value="remember-me"> Remember me</label>
                         </div>
                         <button type="reset" onclick=processLogin() id="loginButton" class="btn btn-lg btn-primary btn-block">Sign in</button>
                     </form>
-
+					
 					<p style="text-align: center">Don't have an account? Sign up
-
+					
 					<!-- Trigger the modal with a button -->
 					<a data-toggle="modal" data-target="#myModal">here</a>
 
 					<!-- Modal -->
 					<div class="modal fade" id="myModal" role="dialog">
 						<div class="modal-dialog">
-
+						
 							<!-- Modal content-->
 							<div class="modal-content">
-
+							
 								<div class="modal-header" style="font-family: Verdana">
 									<button type="button" class="close" data-dismiss="modal">&times;</button>
 									<h2 class="modal-title">Create an account</h2>
@@ -63,16 +112,15 @@
 									<p><input type ="password" placeholder="Password" id="password"></p>
 									<p><input type ="password" placeholder="Confirm Password" id="confirm"></p>
 								</div>
-
+		
 								<div class="modal-footer">
 									<!-- other text can go here -->
-                  <p>   <center><input type ="checkbox" checked="checked" style="margin-bottom:01px"> <font size="2">By creating an account you agree to our <a href="#" style="color:dodgerblue">Terms & Privacy</font></a>.</center></p>
-
+									<p>   <center><input type ="checkbox" checked="checked" style="margin-bottom:01px"> <font size="2">By creating an account you agree to our <a href="#" style="color:dodgerblue">Terms & Privacy</font></a>.</center></p>
 									<button type="button" class="btn btn-primary" data-dismiss="modal" onclick=createAccount()>Create</button>
 								</div>
 							</div>
 						</div>
-					</div>
+					</div>	
                 </div>
             </div>
         </div>

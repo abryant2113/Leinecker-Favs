@@ -7,10 +7,10 @@
 	$lastName = "";
 	$working = "None";
 
-	$servername = "contactmanager-db.mysql.database.azure.com";
-	$username = "cmadmin@contactmanager-db";
-	$password = "5proc!$0oS21";
-	$db = "contact_manager";
+	$servername = "localhost";
+	$username = "root";
+	$password = "";
+	$db = "cop4331";
 	
 	// hashes the password using php's built-in crypt function
 	$hashed_unver_pass = crypt($inData["password"], 'CRYPT_BLOWFISH');

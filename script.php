@@ -16,10 +16,10 @@
 	function populate_table(){
 		
 		// db deets
-		$servername = "contactmanager-db.mysql.database.azure.com";
-		$username = "cmadmin@contactmanager-db";
-		$password = "5proc!$0oS21";
-		$db = "contact_manager";
+		$servername = "localhost";
+		$username = "root";
+		$password = "";
+		$db = "cop4331";
 
 		// grabs the current user's info
 		$current_user = $_POST['current_user'];
@@ -90,7 +90,7 @@
 			echo "Error";		
 
 			$row = $result->fetch_assoc();
-			$contains_username = $row["user"];
+			$contains_username = $row["username"];
 			
 			if($contains_username == $user)
 				echo "Username already exists";
@@ -113,11 +113,11 @@
 	function add_contact(){
 		
 		 // db deets
-		$servername = "contactmanager-db.mysql.database.azure.com";
-		$username = "cmadmin@contactmanager-db";
-		$password = "5proc!$0oS21";
-		$db = "contact_manager";
-	
+		$servername = "localhost";
+		$username = "root";
+		$password = "";
+		$db = "cop4331";
+		
 		// change this portion
 		//$contact_json = file_get_contents('php://input');
 		$contact_json = $_POST['contactObj'];
