@@ -65,12 +65,11 @@
 		$user = $_POST['username'];
 		$pass = $_POST['pass'];
 		
-
 		// db deets
-		$servername = "contactmanager-db.mysql.database.azure.com";
-		$username = "cmadmin@contactmanager-db";
-		$password = "5proc!$0oS21";
-		$db = "contact_manager";
+		$servername = "localhost";
+	  	$username = "root";
+	  	$password = "";
+		$db = "cop4331";
 	   
 		// Establishing the connection
 		$conn = mysqli_connect($servername, $username, $password, $db); 
@@ -154,10 +153,10 @@
 	function delete_contact()
 	{
 		// db deets
-		$servername = "contactmanager-db.mysql.database.azure.com";
-		$username = "cmadmin@contactmanager-db";
-		$password = "5proc!$0oS21";
-		$db = "contact_manager";
+		$servername = "localhost";
+		$username = "root";
+		$password = "";
+		$db = "cop4331";
 		
 		$phone = $_POST['phone'];
 		$current_user = $_POST['current_user'];
